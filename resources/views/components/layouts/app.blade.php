@@ -7,6 +7,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-[#0E0101] text-white">
+@php
+    $cartCount = auth()->check() ? array_sum((array) session('cart_' . auth()->id(), [])) : 0;
+@endphp
 <div class="min-h-screen">
     <header class="sticky top-0 z-20 border-b border-[#3A2424] bg-[#140707]/95 backdrop-blur">
         <div class="mx-auto flex w-[92%] max-w-6xl flex-wrap items-center justify-between gap-4 py-3">
@@ -40,6 +43,14 @@
 
             <div class="flex items-center gap-2">
                 @auth
+                    @if (auth()->user()->role === 'admin')
+                        <a href="{{ route('admin.produits.index') }}" class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                            Admin
+                        </a>
+                    @endif
+                    <a href="{{ route('panier.index') }}" class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                        Panier ({{ $cartCount }})
+                    </a>
                     <span class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-1.5 text-sm text-zinc-100">{{ auth()->user()->nom_complet }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        User::query()->updateOrCreate(
+            ['email' => 'admin@isipa.cd'],
+            [
+                'nom_complet' => 'Administrateur ISIPA',
+                'password' => 'password123',
+                'role' => 'admin',
+                'permission' => 'all',
+            ]
+        );
+
         $this->call([
+            CategorieSeeder::class,
             ProduitSeeder::class,
         ]);
     }
