@@ -9,6 +9,9 @@
 <body class="min-h-screen bg-[#0E0101] text-white">
 @php
     $cartCount = auth()->check() ? array_sum((array) session('cart_' . auth()->id(), [])) : 0;
+    $toast = session('success')
+        ? ['message' => session('success'), 'level' => 'success']
+        : ($errors->any() ? ['message' => $errors->first(), 'level' => 'error'] : null);
 @endphp
 <div class="min-h-screen">
     <header class="sticky top-0 z-20 border-b border-[#3A2424] bg-[#140707]/95 backdrop-blur">
@@ -88,5 +91,9 @@
         {{ $slot }}
     </main>
 </div>
+<div id="app-toast-root" class="pointer-events-none fixed right-4 top-4 z-50 flex w-[min(92vw,24rem)] flex-col gap-3"></div>
+<script>
+    window.AppToast = @json($toast);
+</script>
 </body>
 </html>

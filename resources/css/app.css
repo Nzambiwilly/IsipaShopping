@@ -4,3 +4,39 @@
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+
+@keyframes dashboard-card-flash {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 242, 112, 0); }
+    35% { transform: scale(1.015); box-shadow: 0 0 0 6px rgba(234, 242, 112, 0.08); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(234, 242, 112, 0); }
+}
+
+@keyframes dashboard-card-bounce {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-4px); }
+    60% { transform: translateY(1px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes toast-enter {
+    from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-exit {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-8px) scale(0.98); }
+}
+
+.dashboard-card-live {
+    animation: dashboard-card-flash 550ms ease, dashboard-card-bounce 550ms ease;
+}
+
+.app-toast {
+    pointer-events: auto;
+    animation: toast-enter 180ms ease-out;
+}
+
+.app-toast.is-leaving {
+    animation: toast-exit 180ms ease-in forwards;
+}

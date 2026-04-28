@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DashboardStreamController as AdminDashboardStreamController;
 use App\Http\Controllers\Admin\ProduitController as AdminProduitController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use Illuminate\Support\Facades\Route;
@@ -8,7 +10,8 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->as('admin.')
     ->group(function () {
-        Route::redirect('/', '/admin/produits')->name('dashboard');
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/stream', AdminDashboardStreamController::class)->name('dashboard.stream');
         Route::get('/produits', [AdminProduitController::class, 'index'])->name('produits.index');
         Route::get('/produits/create', [AdminProduitController::class, 'create'])->name('produits.create');
         Route::post('/produits', [AdminProduitController::class, 'store'])->name('produits.store');
