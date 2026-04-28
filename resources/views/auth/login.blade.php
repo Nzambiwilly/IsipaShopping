@@ -1,6 +1,10 @@
 <x-layouts.app :title="'Connexion | ISIPA Shopping'">
     <section class="flex justify-center">
         <article class="w-full max-w-xl rounded-lg border border-[#3A2424] bg-[#210f0f] p-5">
+            <a href="{{ route('catalogue') }}" class="mb-4 inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#1a0808] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                <x-ui.icon name="arrow-left" class="h-4 w-4" />
+                <span>Retour au catalogue</span>
+            </a>
             <p class="text-sm font-semibold text-[#EAF270]">Authentification</p>
             <h1 class="mt-1 text-2xl font-bold">Connexion client</h1>
 

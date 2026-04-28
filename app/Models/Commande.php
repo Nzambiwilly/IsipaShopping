@@ -6,21 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commande extends Model
 {
+    protected $table = 'commandes';
+
     protected $fillable = [
-        'id_client',
+        'user_id',
+        'adresse_livraison',
+        'date_livraison',
         'date_commande',
-        'total',
-        'statut',
     ];
 
     public function client()
     {
-        return $this->belongsTo(user::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function produits()
+    public function lignes()
     {
-        return $this->belongsToMany(Produits::class, 'commande_produit', 'id_commande', 'id_produit')
-                    ->withPivot('quantite', 'prix_unitaire');
+        return $this->hasMany(CommandeProduit::class, 'commande_id');
+    }
+
+    public function paiement()
+    {
+        return $this->hasOne(Paiement::class, 'commande_id');
     }
 }

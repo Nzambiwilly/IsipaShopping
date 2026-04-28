@@ -6,22 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommandeProduit extends Model
 {
-    protected $table = 'commande_produit';
+    protected $table = 'commande_produits';
 
     protected $fillable = [
-        'id_commande',
-        'id_produit',
+        'commande_id',
+        'produit_id',
         'quantite',
         'prix_unitaire',
     ];
 
     public function commande()
     {
-        return $this->belongsTo(Commande::class, 'id_commande');
+        return $this->belongsTo(Commande::class, 'commande_id');
     }
 
     public function produit()
     {
-        return $this->belongsTo(Produits::class, 'id_produit');
+        return $this->belongsTo(Produits::class, 'produit_id');
     }
 }

@@ -7,6 +7,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-[#0E0101] text-white">
+@php
+    $cartCount = auth()->check() ? array_sum((array) session('cart_' . auth()->id(), [])) : 0;
+    $toast = session('success')
+        ? ['message' => session('success'), 'level' => 'success']
+        : ($errors->any() ? ['message' => $errors->first(), 'level' => 'error'] : null);
+@endphp
 <div class="min-h-screen">
     <header class="sticky top-0 z-20 border-b border-[#3A2424] bg-[#140707]/95 backdrop-blur">
         <div class="mx-auto flex w-[92%] max-w-6xl flex-wrap items-center justify-between gap-4 py-3">
@@ -40,6 +46,16 @@
 
             <div class="flex items-center gap-2">
                 @auth
+                    @if (auth()->user()->hasRole('superadmin', 'admin', 'editor'))
+                        <a href="{{ route('admin.produits.index') }}" class="inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                            <x-ui.icon name="admin" class="h-4 w-4" />
+                            <span>Admin</span>
+                        </a>
+                    @endif
+                    <a href="{{ route('panier.index') }}" class="inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                        <x-ui.icon name="cart" class="h-4 w-4" />
+                        <span>Panier ({{ $cartCount }})</span>
+                    </a>
                     <span class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-1.5 text-sm text-zinc-100">{{ auth()->user()->nom_complet }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -75,5 +91,9 @@
         {{ $slot }}
     </main>
 </div>
+<div id="app-toast-root" class="pointer-events-none fixed right-4 top-4 z-50 flex w-[min(92vw,24rem)] flex-col gap-3"></div>
+<script>
+    window.AppToast = @json($toast);
+</script>
 </body>
 </html>

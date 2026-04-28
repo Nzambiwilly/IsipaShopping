@@ -9,7 +9,7 @@ class ProduitsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Produits::query();
+        $query = Produits::query()->with('categorie');
 
         $search = trim((string) $request->input('q', ''));
         if ($search !== '') {

@@ -50,10 +50,29 @@
                                 {{ $produit->stock > 0 ? 'En stock' : 'Rupture' }}
                             </span>
                         </div>
+                        <p class="text-xs text-zinc-400">
+                            Categorie: {{ $produit->categorie?->nom ?? 'Non classe' }}
+                        </p>
                         <p class="min-h-[42px] text-sm text-zinc-300">{{ \Illuminate\Support\Str::limit($produit->description ?: 'Produit informatique.', 110) }}</p>
                         <div class="flex items-center justify-between gap-2">
                             <strong class="text-[#EAF270]">{{ number_format((float) $produit->prix_unitaire, 2, ',', ' ') }} USD</strong>
                             <span class="text-sm text-zinc-300">{{ $produit->stock }} unite(s)</span>
+                        </div>
+                        <div>
+                            @auth
+                                <form method="POST" action="{{ route('panier.add', $produit) }}" class="flex items-center gap-2">
+                                    @csrf
+                                    <input type="number" name="quantite" min="1" max="{{ max(1, $produit->stock) }}" value="1" class="w-16 rounded-md border border-[#3A2424] bg-[#1a0808] px-2 py-1.5 text-sm text-white">
+                                    <button type="submit" class="inline-flex items-center gap-1.5 rounded-md bg-[#EAF270] px-3 py-1.5 text-xs font-semibold text-[#1B1B1B] transition hover:bg-[#d6de5f]" @disabled($produit->stock < 1)>
+                                        <x-ui.icon name="cart" class="h-3.5 w-3.5" />
+                                        <span>Ajouter au panier</span>
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="inline-flex rounded-md border border-[#3A2424] bg-[#1a0808] px-3 py-1.5 text-xs font-medium text-white transition hover:border-[#EAF270]">
+                                    Connectez-vous pour commander
+                                </a>
+                            @endauth
                         </div>
                     </div>
                 </article>

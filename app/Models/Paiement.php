@@ -6,15 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paiement extends Model
 {
+    protected $table = 'paiements';
+
     protected $fillable = [
-        'id_commande',
+        'commande_id',
         'montant',
+        'methode_paeiment',
         'methode_paiement',
         'statut',
     ];
 
     public function commande()
     {
-        return $this->belongsTo(Commande::class, 'id_commande');
+        return $this->belongsTo(Commande::class, 'commande_id');
     }
 }
