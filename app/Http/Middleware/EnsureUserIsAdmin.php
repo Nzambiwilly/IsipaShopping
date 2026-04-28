@@ -12,11 +12,10 @@ class EnsureUserIsAdmin
     {
         $user = $request->user();
 
-        if (! $user || $user->role !== 'admin') {
+        if (! $user || ! $user->hasRole('superadmin', 'admin', 'editor')) {
             abort(403, 'Acces reserve aux administrateurs.');
         }
 
         return $next($request);
     }
 }
-

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +31,7 @@ class AuthController extends Controller
             'nom_complet' => $validated['nom_complet'],
             'email' => $validated['email'],
             'password' => $validated['password'],
-            'role' => 'client',
+            'role' => Role::USER,
             'permission' => 'user',
         ]);
 
@@ -69,4 +70,3 @@ class AuthController extends Controller
         return redirect()->route('catalogue')->with('success', 'Vous etes deconnecte.');
     }
 }
-

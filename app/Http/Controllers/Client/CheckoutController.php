@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Client;
 
+use App\Http\Controllers\Controller;
 use App\Models\Commande;
 use App\Models\CommandeProduit;
 use App\Models\Paiement;
@@ -101,7 +102,7 @@ class CheckoutController extends Controller
             ]);
         });
 
-        $cart = PanierController::getCartStatic($request);
+        $cart = CartController::getCartStatic($request);
         foreach ($selectedIds as $produitId) {
             unset($cart[$produitId]);
         }
@@ -113,7 +114,7 @@ class CheckoutController extends Controller
 
     private function buildCartItems(Request $request, array $selectedIds = [])
     {
-        $cart = PanierController::getCartStatic($request);
+        $cart = CartController::getCartStatic($request);
         if ($selectedIds !== []) {
             $cart = array_intersect_key($cart, array_flip($selectedIds));
         }

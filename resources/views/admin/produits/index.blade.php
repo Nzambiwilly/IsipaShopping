@@ -4,9 +4,18 @@
             <h1 class="text-2xl font-bold md:text-3xl">Gestion des produits</h1>
             <p class="mt-1 text-sm text-zinc-300">Ajoutez et modifiez les produits du catalogue.</p>
         </div>
-        <a href="{{ route('admin.produits.create') }}" class="rounded-md bg-[#EAF270] px-4 py-2 text-sm font-semibold text-[#1B1B1B] transition hover:bg-[#d6de5f]">
-            Ajouter un produit
-        </a>
+        <div class="flex flex-wrap gap-2">
+            @if (auth()->user()->hasPermission('manage_users'))
+                <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#1a0808] px-4 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                    <x-ui.icon name="admin" class="h-4 w-4" />
+                    <span>Gerer les utilisateurs</span>
+                </a>
+            @endif
+            <a href="{{ route('admin.produits.create') }}" class="inline-flex items-center gap-2 rounded-md bg-[#EAF270] px-4 py-2 text-sm font-semibold text-[#1B1B1B] transition hover:bg-[#d6de5f]">
+                <x-ui.icon name="plus" class="h-4 w-4" />
+                <span>Ajouter un produit</span>
+            </a>
+        </div>
     </section>
 
     <section class="overflow-hidden rounded-lg border border-[#3A2424]">
@@ -36,14 +45,16 @@
                         <td class="px-4 py-3">{{ ucfirst($produit->statut) }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('admin.produits.edit', $produit) }}" class="rounded-md border border-[#3A2424] bg-[#1a0808] px-3 py-1.5 text-xs font-medium text-white transition hover:border-[#EAF270]">
-                                    Modifier
+                                <a href="{{ route('admin.produits.edit', $produit) }}" class="inline-flex items-center gap-1.5 rounded-md border border-[#3A2424] bg-[#1a0808] px-3 py-1.5 text-xs font-medium text-white transition hover:border-[#EAF270]">
+                                    <x-ui.icon name="pencil" class="h-3.5 w-3.5" />
+                                    <span>Modifier</span>
                                 </a>
                                 <form method="POST" action="{{ route('admin.produits.destroy', $produit) }}" onsubmit="return confirm('Supprimer ce produit ?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="rounded-md border border-red-500/40 bg-red-600/20 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:bg-red-600/30">
-                                        Supprimer
+                                    <button type="submit" class="inline-flex items-center gap-1.5 rounded-md border border-red-500/40 bg-red-600/20 px-3 py-1.5 text-xs font-medium text-red-200 transition hover:bg-red-600/30">
+                                        <x-ui.icon name="trash" class="h-3.5 w-3.5" />
+                                        <span>Supprimer</span>
                                     </button>
                                 </form>
                             </div>

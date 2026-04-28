@@ -1,6 +1,10 @@
 <x-layouts.app :title="'Contact | ISIPA Shopping'">
     <section class="mb-6">
         <div>
+            <a href="{{ route('catalogue') }}" class="mb-3 inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#1a0808] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                <x-ui.icon name="arrow-left" class="h-4 w-4" />
+                <span>Retour au catalogue</span>
+            </a>
             <p class="text-sm font-semibold text-[#EAF270]">Contact</p>
             <h1 class="mt-1 text-2xl font-bold leading-tight md:text-4xl">Parlons de votre besoin informatique</h1>
             <p class="mt-2 max-w-3xl text-sm text-zinc-300 md:text-base">Notre equipe est disponible pour les demandes commerciales, devis et informations sur les produits.</p>

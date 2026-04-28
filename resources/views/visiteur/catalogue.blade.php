@@ -63,8 +63,9 @@
                                 <form method="POST" action="{{ route('panier.add', $produit) }}" class="flex items-center gap-2">
                                     @csrf
                                     <input type="number" name="quantite" min="1" max="{{ max(1, $produit->stock) }}" value="1" class="w-16 rounded-md border border-[#3A2424] bg-[#1a0808] px-2 py-1.5 text-sm text-white">
-                                    <button type="submit" class="rounded-md bg-[#EAF270] px-3 py-1.5 text-xs font-semibold text-[#1B1B1B] transition hover:bg-[#d6de5f]" @disabled($produit->stock < 1)>
-                                        Ajouter au panier
+                                    <button type="submit" class="inline-flex items-center gap-1.5 rounded-md bg-[#EAF270] px-3 py-1.5 text-xs font-semibold text-[#1B1B1B] transition hover:bg-[#d6de5f]" @disabled($produit->stock < 1)>
+                                        <x-ui.icon name="cart" class="h-3.5 w-3.5" />
+                                        <span>Ajouter au panier</span>
                                     </button>
                                 </form>
                             @else

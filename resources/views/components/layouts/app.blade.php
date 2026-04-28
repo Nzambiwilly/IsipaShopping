@@ -43,13 +43,15 @@
 
             <div class="flex items-center gap-2">
                 @auth
-                    @if (auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.produits.index') }}" class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
-                            Admin
+                    @if (auth()->user()->hasRole('superadmin', 'admin', 'editor'))
+                        <a href="{{ route('admin.produits.index') }}" class="inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                            <x-ui.icon name="admin" class="h-4 w-4" />
+                            <span>Admin</span>
                         </a>
                     @endif
-                    <a href="{{ route('panier.index') }}" class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
-                        Panier ({{ $cartCount }})
+                    <a href="{{ route('panier.index') }}" class="inline-flex items-center gap-2 rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-2 text-sm font-medium text-white transition hover:border-[#EAF270]">
+                        <x-ui.icon name="cart" class="h-4 w-4" />
+                        <span>Panier ({{ $cartCount }})</span>
                     </a>
                     <span class="rounded-md border border-[#3A2424] bg-[#210f0f] px-3 py-1.5 text-sm text-zinc-100">{{ auth()->user()->nom_complet }}</span>
                     <form method="POST" action="{{ route('logout') }}">

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Produits;
 use App\Models\User;
+use App\Models\Commande;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -71,5 +72,77 @@ class VisitorMvpTest extends TestCase
         $login->assertRedirect(route('catalogue'));
         $this->assertAuthenticated();
     }
-}
 
+    public function test_client_can_pay_only_selected_cart_items_and_keep_the_rest(): void
+    {
+        $user = User::factory()->create();
+
+        $ordinateur = Produits::query()->create([
+            'nom' => 'Ordinateur Portable',
+            'description' => 'Portable pro',
+            'prix_unitaire' => 800,
+            'stock' => 5,
+            'date_fabrication' => now()->toDateString(),
+            'statut' => 'disponible',
+            'date_ajout' => now()->toDateString(),
+        ]);
+
+        $souris = Produits::query()->create([
+            'nom' => 'Souris USB',
+            'description' => 'Souris simple',
+            'prix_unitaire' => 20,
+            'stock' => 10,
+            'date_fabrication' => now()->toDateString(),
+            'statut' => 'disponible',
+            'date_ajout' => now()->toDateString(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->withSession([
+                'cart_' . $user->id => [
+                    $ordinateur->id => 1,
+                    $souris->id => 2,
+                ],
+            ])
+            ->get(route('checkout.show', [
+                'selected_items' => [$ordinateur->id],
+            ]));
+
+        $response->assertOk();
+        $response->assertSee('Ordinateur Portable');
+        $response->assertDontSee('Souris USB');
+
+        $storeResponse = $this->actingAs($user)
+            ->withSession([
+                'cart_' . $user->id => [
+                    $ordinateur->id => 1,
+                    $souris->id => 2,
+                ],
+            ])
+            ->post(route('checkout.store'), [
+                'selected_items' => [$ordinateur->id],
+                'adresse_livraison' => '12 avenue de la Livraison, Kinshasa',
+                'date_livraison' => now()->addDays(2)->toDateString(),
+                'methode_paiement' => 'mobile_money',
+            ]);
+
+        $storeResponse->assertRedirect(route('catalogue'));
+        $storeResponse->assertSessionHas('success');
+
+        $this->assertDatabaseCount('commandes', 1);
+        $commande = Commande::query()->first();
+        $this->assertNotNull($commande);
+        $this->assertDatabaseHas('commande_produits', [
+            'commande_id' => $commande->id,
+            'produit_id' => $ordinateur->id,
+            'quantite' => 1,
+        ]);
+        $this->assertDatabaseMissing('commande_produits', [
+            'commande_id' => $commande->id,
+            'produit_id' => $souris->id,
+        ]);
+        $storeResponse->assertSessionHas('cart_' . $user->id, [
+            $souris->id => 2,
+        ]);
+    }
+}
